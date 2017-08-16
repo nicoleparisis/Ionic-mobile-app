@@ -1,17 +1,36 @@
 <ion-header>
-  <ion-navbar>
+  <ion-navbar class="nav-head">
     <ion-title>Home</ion-title>
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
-  <h2>Welcome to Ionic!</h2>
-  <p>
-    This starter project comes with simple tabs-based layout for apps
-    that are going to primarily use a Tabbed UI.
-  </p>
-  <p>
-    Take a look at the <code>src/pages/</code> directory to add or change tabs,
-    update any existing page or create new pages.
-  </p>
+<ion-content padding class="home">
+  <form (submit)="processForm()" [formGroup]="form">
+    <ion-item><ion-input formControlName="startLocation" placeholder="start location" (keyup)="startAddress(start)" [(ngModel)]="start"></ion-input></ion-item> 
+  
+    <ion-item><ion-input formControlName="endLocation" placeholder="end location" (keyup)="endAddress(end)" [(ngModel)]="end"></ion-input></ion-item> 
+
+<div *ngIf="errMessage" class="warning" padding><i>{{errMessage}}</i></div>
+
+
+    <div padding>
+        <button ion-button block type="submit">Get Directions</button>
+    </div>
+  </form>
+
+
+<div *ngIf="selectedItem" padding>
+  <img src="{{selectedItem.mapUrl}}"/>
+</div>
+<h5 colspan="4">Distance {{distance}}m - Time: {{time}}</h5>
+    
+<ion-list>
+  <button ion-item *ngFor="let item of maneuvers; let i = index" (click)="itemTapped($event, item, start, end)">
+    <p item-left><img src="{{item.iconUrl}}"/>
+    {{item.index + 1}}.
+    {{item.narrative.length > 60 ? item.narrative.substring(0, 60) + '...' : item.narrative}}</p>
+    <div item-right>{{item.distance}}m</div>
+  </button>
+</ion-list>
+
 </ion-content>
